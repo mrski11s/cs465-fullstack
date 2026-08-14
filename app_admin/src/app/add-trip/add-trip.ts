@@ -1,24 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from "@angular/forms";
-
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { TripDataService } from '../services/trip-data';
+
 @Component({
   selector: 'app-add-trip',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-trip.html',
+  template: `Number of ticks: {{ numberOfTicks }}`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './add-trip.css'
 })
 export class AddTripComponent implements OnInit {
   public addForm!: FormGroup;
   submitted = false;
+  numberOfTicks = 0;
+
   constructor(
+    private ref: ChangeDetectorRef,
     private formBuilder: FormBuilder,
     private router: Router,
     private tripService: TripDataService
-  ) { }
+  ) {
+    setInterval(() => {
+      this.numberOfTicks++;
+      // require view to be updated
+      this.ref.markForCheck();
+    },
+      1000);
+  }
   ngOnInit() {
     this.addForm = this.formBuilder.group({
       _id: [],

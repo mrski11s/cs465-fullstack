@@ -1,14 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy,ChangeDetectorRef } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TripListing } from './trip-listing/trip-listing';
 
+import { Navbar } from './navbar/navbar';
 @Component({
   selector: 'app-root',
-  imports: [CommonModule,RouterOutlet,TripListing],
+  standalone:true,
+  imports: [CommonModule,RouterOutlet,Navbar],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  template: `Number of ticks: {{ numberOfTicks }}`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
+  numberOfTicks = 0;
   title = 'Travlr Getaways Admin!';
+  constructor(
+    private ref: ChangeDetectorRef,
+    
+  ) { 
+    setInterval(() => {
+      this.numberOfTicks++;
+      // require view to be updated
+      this.ref.markForCheck();
+    }, 
+    1000);
+  }
 }

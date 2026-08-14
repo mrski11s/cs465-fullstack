@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy,ChangeDetectorRef  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule }
-  from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { TripDataService } from '../services/trip-data';
 import { Trip } from '../models/trip';
-
 
 @Component({
   selector: 'app-edit-trip',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-trip.html',
-  styleUrl: './edit-trip.css'
+  styleUrl: './edit-trip.css',
+  template: `Number of ticks: {{ numberOfTicks }}`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class EditTripComponent implements OnInit {
@@ -20,11 +20,20 @@ export class EditTripComponent implements OnInit {
   trip!: Trip;
   submitted = false;
   message: string = '';
+  numberOfTicks = 0;
   constructor(
+    private ref: ChangeDetectorRef,
     private formBuilder: FormBuilder,
     private router: Router,
     private tripDataService: TripDataService
-  ) { }
+  ) { 
+    setInterval(() => {
+      this.numberOfTicks++;
+      // require view to be updated
+      this.ref.markForCheck();
+    }, 
+    1000);
+  }
   ngOnInit(): void {
     // Retrieve stashed trip ID
     let tripCode = localStorage.getItem("tripCode");
