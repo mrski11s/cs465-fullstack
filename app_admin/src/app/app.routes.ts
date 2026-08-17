@@ -6,8 +6,9 @@ import { TripCardComponent } from './trip-card/trip-card';
 import { Login } from './login/login';
 export const routes: Routes = [
     {path:'',component:TripListing,pathMatch:'full'},
+    {path:'trip-card',component:TripCardComponent},
     {path:'add-trip',component:AddTripComponent},
     {path:'edit-trip',component:EditTripComponent},
     {path:'login',component:Login},
-    {path:'trip-card',component:TripCardComponent}
+    
 ];
